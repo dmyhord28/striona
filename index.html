@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080a">
+  <meta name="description" content="Nova Studios — nowoczesne strony internetowe, aplikacje, rozwiązania AI i oprogramowanie dla firm.">
+  <title>Nova Studios — Nowoczesne Rozwiązania IT & Software House</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#08080a', darkCard: '#121216', neonRed: '#ff1a3c',
+            rubyRed: '#dc2626', deepCrimson: '#880815'
+          },
+          fontFamily: { sans: ['Outfit', 'sans-serif'] },
+          keyframes: {
+            pulseGlow: {
+              '0%': { boxShadow: '0 0 15px rgba(255,26,60,.2)' },
+              '100%': { boxShadow: '0 0 35px rgba(255,26,60,.45)' }
+            },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-8px)' } }
+          },
+          animation: { 'pulse-glow': 'pulseGlow 3s infinite alternate', float: 'float 6s ease-in-out infinite' }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root { color-scheme: dark; }
+    html { scroll-padding-top: 110px; }
+    body { font-family: 'Outfit', sans-serif; background: #08080a; color: #f3f4f6; overflow-x: hidden; }
+    .glass-card { background: rgba(18,18,22,.78); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,26,60,.17); transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease; }
+    .glass-card:hover { border-color: rgba(255,26,60,.55); box-shadow: 0 10px 30px -10px rgba(255,26,60,.25); }
+    .text-gradient-red { background: linear-gradient(135deg,#fff 30%,#ff1a3c 80%,#a8051e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #08080a; }
+    ::-webkit-scrollbar-thumb { background: #ff1a3c; border-radius: 4px; }
+    #cursor-follower { pointer-events:none; position:fixed; width:24px; height:24px; border-radius:50%; background:rgba(255,26,60,.18); border:1px solid #ff1a3c; box-shadow:0 0 15px #ff1a3c; transform:translate(-50%,-50%); z-index:9999; display:none; }
+    @media (min-width:1024px) and (pointer:fine) { #cursor-follower { display:block; } }
+    .modal-active { opacity:1 !important; pointer-events:auto !important; transform:scale(1) !important; }
+    .faq-answer[hidden] { display:none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+      #cursor-follower { display:none !important; }
+    }
+  </style>
+</head>
+<body class="relative selection:bg-neonRed selection:text-white">
+  <div id="cursor-follower" aria-hidden="true"></div>
+  <canvas id="bg-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0" aria-hidden="true"></canvas>
+
+  <header class="fixed top-4 left-0 right-0 z-40 max-w-7xl mx-auto px-4 sm:px-6">
+    <nav class="glass-card rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between bg-darkBg/90" aria-label="Główna nawigacja">
+      <a href="#top" class="flex items-center gap-3 group" aria-label="Nova Studios — strona główna">
+        <span class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-neonRed to-deepCrimson flex items-center justify-center font-black text-xl text-white shadow-lg shadow-neonRed/30">N</span>
+        <span class="flex flex-col">
+          <span class="text-lg sm:text-xl font-extrabold tracking-wider text-white">NOVA<span class="text-neonRed">.</span>STUDIOS</span>
+          <span class="text-[10px] tracking-widest text-gray-400 -mt-1 uppercase">Software House</span>
+        </span>
+      </a>
+      <div class="hidden md:flex items-center gap-5 lg:gap-7 text-sm font-medium">
+        <a href="#specjalizacje" class="text-gray-300 hover:text-neonRed">Specjalizacje</a>
+        <a href="#kalkulator" class="text-gray-300 hover:text-neonRed">Kalkulator</a>
+        <a href="#projekty" class="text-gray-300 hover:text-neonRed">Portfolio</a>
+        <a href="#technologie" class="text-gray-300 hover:text-neonRed">Tech Stack</a>
+        <a href="#faq" class="text-gray-300 hover:text-neonRed">FAQ</a>
+      </div>
+      <a href="#kontakt" class="hidden lg:inline-flex px-5 py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-neonRed to-rubyRed text-white shadow-lg shadow-neonRed/20 hover:scale-105 transition">Darmowa wycena <i class="fa-solid fa-arrow-right ml-2 text-xs"></i></a>
+      <button id="mobile-menu-btn" class="md:hidden text-gray-200 hover:text-neonRed text-2xl p-2" type="button" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i></button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden mt-3 glass-card rounded-2xl p-5 flex-col gap-3 text-center bg-darkBg/95">
+      <a href="#specjalizacje" class="mobile-link py-2 text-gray-200 hover:text-neonRed">Specjalizacje</a>
+      <a href="#kalkulator" class="mobile-link py-2 text-gray-200 hover:text-neonRed">Kalkulator wyceny</a>
+      <a href="#projekty" class="mobile-link py-2 text-gray-200 hover:text-neonRed">Portfolio</a>
+      <a href="#technologie" class="mobile-link py-2 text-gray-200 hover:text-neonRed">Tech Stack</a>
+      <a href="#faq" class="mobile-link py-2 text-gray-200 hover:text-neonRed">FAQ</a>
+      <a href="#kontakt" class="mobile-link mt-1 py-3 bg-neonRed text-white font-bold rounded-xl">Darmowa wycena</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="relative min-h-screen pt-36 pb-20 flex items-center justify-center z-10 px-4">
+      <div class="max-w-6xl mx-auto text-center relative z-10">
+        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-card text-xs sm:text-sm font-medium mb-8">
+          <span class="w-2.5 h-2.5 rounded-full bg-neonRed animate-pulse"></span>
+          <span class="text-gray-300">Dostępność: <span class="text-neonRed font-bold">Przyjmujemy projekty na Q4 2026</span></span>
+        </div>
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-tight mb-6">Tworzymy przyszłość<br><span class="text-gradient-red">aplikacji i nowoczesnego IT</span></h1>
+        <p class="max-w-3xl mx-auto text-gray-400 text-lg sm:text-xl font-light leading-relaxed mb-10">Przekształcamy Twoje pomysły w szybkie aplikacje webowe, systemy AI i niezawodne oprogramowanie. Termin realizacji ustalamy indywidualnie, w zależności od zakresu projektu.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-5 mb-16">
+          <a href="#specjalizacje" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-neonRed via-rubyRed to-deepCrimson shadow-xl shadow-neonRed/25 hover:scale-105 transition flex items-center justify-center gap-3"><i class="fa-solid fa-rocket"></i>Zobacz oferty i cennik</a>
+          <a href="#kalkulator" class="w-full sm:w-auto px-8 py-4 rounded-xl font-semibold text-gray-200 glass-card hover:text-white transition flex items-center justify-center gap-3"><i class="fa-solid fa-calculator text-neonRed"></i>Szybki kalkulator</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+          <div class="glass-card rounded-xl p-4"><i class="fa-solid fa-gauge-high text-neonRed text-xl mb-2"></i><p class="font-bold">Wydajność</p><p class="text-sm text-gray-400">Szybkie, przemyślane rozwiązania.</p></div>
+          <div class="glass-card rounded-xl p-4"><i class="fa-solid fa-mobile-screen-button text-neonRed text-xl mb-2"></i><p class="font-bold">Responsywność</p><p class="text-sm text-gray-400">Dopasowanie do różnych ekranów.</p></div>
+          <div class="glass-card rounded-xl p-4"><i class="fa-solid fa-shield-halved text-neonRed text-xl mb-2"></i><p class="font-bold">Bezpieczeństwo</p><p class="text-sm text-gray-400">Dobre praktyki od początku projektu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="specjalizacje" class="py-24 relative z-10 px-4 bg-darkBg/70">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="text-neonRed font-bold text-sm tracking-widest uppercase px-3 py-1 bg-neonRed/10 rounded-full border border-neonRed/20">Zakres usług i wycena</span>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-5 mb-4">W czym się <span class="text-gradient-red">specjalizujemy?</span></h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">Wybierz usługę, aby poznać przykładowy zakres prac, orientacyjny czas i cenę.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <button type="button" data-service="web" class="glass-card p-8 rounded-2xl text-left group">
+            <span class="w-14 h-14 rounded-xl bg-neonRed/10 border border-neonRed/40 flex items-center justify-center text-neonRed text-2xl mb-6"><i class="fa-solid fa-code"></i></span>
+            <span class="flex items-center justify-between gap-3 mb-2"><span class="text-xs font-bold text-neonRed uppercase bg-neonRed/10 px-2 py-1 rounded">Około 3–7 dni</span><span class="text-xs text-gray-400">od 1 800 PLN</span></span>
+            <span class="block text-2xl font-bold text-white mb-3 group-hover:text-neonRed">Strony i aplikacje web</span>
+            <span class="block text-gray-400 text-sm leading-relaxed mb-6">Landing page, strony firmowe, e-commerce i panele administracyjne.</span>
+            <span class="text-neonRed font-semibold text-sm">Szczegóły i wycena <i class="fa-solid fa-arrow-right ml-1"></i></span>
+          </button>
+          <button type="button" data-service="mobile" class="glass-card p-8 rounded-2xl text-left group">
+            <span class="w-14 h-14 rounded-xl bg-neonRed/10 border border-neonRed/40 flex items-center justify-center text-neonRed text-2xl mb-6"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <span class="flex items-center justify-between gap-3 mb-2"><span class="text-xs font-bold text-neonRed uppercase bg-neonRed/10 px-2 py-1 rounded">Około 10–21 dni</span><span class="text-xs text-gray-400">od 4 500 PLN</span></span>
+            <span class="block text-2xl font-bold text-white mb-3 group-hover:text-neonRed">Aplikacje mobilne</span>
+            <span class="block text-gray-400 text-sm leading-relaxed mb-6">Aplikacje iOS i Android, powiadomienia push oraz integracje płatności.</span>
+            <span class="text-neonRed font-semibold text-sm">Szczegóły i wycena <i class="fa-solid fa-arrow-right ml-1"></i></span>
+          </button>
+          <button type="button" data-service="ai" class="glass-card p-8 rounded-2xl text-left group">
+            <span class="w-14 h-14 rounded-xl bg-neonRed/10 border border-neonRed/40 flex items-center justify-center text-neonRed text-2xl mb-6"><i class="fa-solid fa-brain"></i></span>
+            <span class="flex items-center justify-between gap-3 mb-2"><span class="text-xs font-bold text-neonRed uppercase bg-neonRed/10 px-2 py-1 rounded">Około 7–14 dni</span><span class="text-xs text-gray-400">od 3 200 PLN</span></span>
+            <span class="block text-2xl font-bold text-white mb-3 group-hover:text-neonRed">Sztuczna inteligencja i AI</span>
+            <span class="block text-gray-400 text-sm leading-relaxed mb-6">Integracje modeli językowych, boty wsparcia i automatyzacja procesów.</span>
+            <span class="text-neonRed font-semibold text-sm">Szczegóły i wycena <i class="fa-solid fa-arrow-right ml-1"></i></span>
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 text-center mt-6">Ceny i terminy są orientacyjne. Ostateczna wycena zależy od wymagań i zakresu projektu.</p>
+      </div>
+    </section>
+
+    <div id="service-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 scale-95" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+      <div class="glass-card w-full max-w-3xl rounded-3xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto bg-darkCard text-white shadow-2xl">
+        <button id="modal-close" type="button" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neonRed/10 border border-neonRed/30 text-neonRed hover:bg-neonRed hover:text-white flex items-center justify-center text-xl" aria-label="Zamknij szczegóły"><i class="fa-solid fa-xmark"></i></button>
+        <div id="modal-content" class="pr-8"></div>
+      </div>
+    </div>
+
+    <section id="kalkulator" class="py-24 relative z-10 px-4">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-14"><span class="text-neonRed font-bold text-sm tracking-widest uppercase px-3 py-1 bg-neonRed/10 rounded-full border border-neonRed/20">Interaktywne narzędzie</span><h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-5 mb-4">Kalkulator <span class="text-gradient-red">wyceny</span></h2><p class="text-gray-400">Wstępny szacunek, który pomoże określić budżet.</p></div>
+        <div class="glass-card p-6 sm:p-10 rounded-3xl bg-darkCard/90">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-7">
+              <div><label class="block text-sm font-bold text-gray-200 mb-3 uppercase">1. Typ projektu</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <button type="button" data-type="landing" class="calc-type-btn p-3 rounded-xl border border-neonRed bg-neonRed/20 text-white font-medium text-sm flex flex-col items-center gap-2"><i class="fa-solid fa-laptop text-neonRed text-lg"></i>Landing page</button>
+                  <button type="button" data-type="app" class="calc-type-btn p-3 rounded-xl border border-gray-700 bg-darkBg text-gray-300 font-medium text-sm flex flex-col items-center gap-2"><i class="fa-solid fa-code text-neonRed text-lg"></i>Web app / SaaS</button>
+                  <button type="button" data-type="mobile" class="calc-type-btn p-3 rounded-xl border border-gray-700 bg-darkBg text-gray-300 font-medium text-sm flex flex-col items-center gap-2"><i class="fa-solid fa-mobile-screen-button text-neonRed text-lg"></i>App mobilna</button>
+                </div>
+              </div>
+              <div><div class="flex justify-between items-center gap-3 mb-3"><label for="pages-range" class="text-sm font-bold text-gray-200 uppercase">2. Liczba ekranów / podstron</label><span id="pages-count-display" class="text-neonRed font-bold text-sm">1–3 ekrany</span></div><input type="range" id="pages-range" min="1" max="5" value="1" step="1" class="w-full accent-neonRed cursor-pointer" aria-describedby="pages-help"><p id="pages-help" class="text-xs text-gray-500 mt-2">Przesuń suwak, aby zmienić zakres projektu.</p></div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl bg-gradient-to-b from-darkBg to-darkCard flex flex-col justify-between">
+              <div><h3 class="text-lg font-bold text-white mb-4 pb-2 border-b border-gray-800"><i class="fa-solid fa-receipt text-neonRed mr-2"></i>Wycena orientacyjna</h3>
+                <div class="space-y-4 mb-6"><div><span class="text-xs text-gray-400 block uppercase">Szacowany budżet</span><div class="text-3xl font-black text-neonRed" id="calc-price" aria-live="polite">1 800 PLN</div></div><div><span class="text-xs text-gray-400 block uppercase">Szacowany czas</span><div class="text-xl font-bold text-white" id="calc-time">ok. 3–6 dni</div></div></div>
+              </div>
+              <a href="#kontakt" class="w-full py-3.5 rounded-xl bg-neonRed text-white font-bold hover:bg-rubyRed text-center transition">Przejdź do formularza</a>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-6">Kalkulator ma charakter informacyjny i nie stanowi wiążącej oferty.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projekty" class="py-24 relative z-10 px-4 bg-darkBg/70">
+      <div class="max-w-7xl mx-auto"><div class="text-center mb-12"><span class="text-neonRed font-bold text-sm tracking-widest uppercase">Nasze możliwości</span><h2 class="text-3xl sm:text-5xl font-extrabold mt-4">Przykładowe <span class="text-gradient-red">realizacje</span></h2><p class="text-gray-400 mt-4 max-w-2xl mx-auto">Poniżej przykładowe kierunki projektów — sekcję można uzupełnić o prawdziwe realizacje i studia przypadków.</p></div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="glass-card rounded-2xl p-7"><div class="h-36 rounded-xl bg-gradient-to-br from-red-950 via-darkCard to-black flex items-center justify-center mb-5"><i class="fa-solid fa-chart-line text-5xl text-neonRed"></i></div><p class="text-xs text-neonRed font-bold uppercase mb-2">Dashboard</p><h3 class="text-xl font-bold mb-2">Panel analityczny</h3><p class="text-sm text-gray-400">Czytelne raporty, wizualizacja danych i zarządzanie użytkownikami.</p></article>
+          <article class="glass-card rounded-2xl p-7"><div class="h-36 rounded-xl bg-gradient-to-br from-red-950 via-darkCard to-black flex items-center justify-center mb-5"><i class="fa-solid fa-cart-shopping text-5xl text-neonRed"></i></div><p class="text-xs text-neonRed font-bold uppercase mb-2">E-commerce</p><h3 class="text-xl font-bold mb-2">Sklep internetowy</h3><p class="text-sm text-gray-400">Nowoczesna prezentacja produktów i wygodna ścieżka zakupowa.</p></article>
+          <article class="glass-card rounded-2xl p-7"><div class="h-36 rounded-xl bg-gradient-to-br from-red-950 via-darkCard to-black flex items-center justify-center mb-5"><i class="fa-solid fa-robot text-5xl text-neonRed"></i></div><p class="text-xs text-neonRed font-bold uppercase mb-2">Automatyzacja</p><h3 class="text-xl font-bold mb-2">Asystent AI</h3><p class="text-sm text-gray-400">Wsparcie użytkowników i automatyzacja powtarzalnych zadań.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="technologie" class="py-24 relative z-10 px-4"><div class="max-w-6xl mx-auto text-center"><span class="text-neonRed font-bold text-sm tracking-widest uppercase">Narzędzia</span><h2 class="text-3xl sm:text-5xl font-extrabold mt-4 mb-10">Technologie i <span class="text-gradient-red">narzędzia</span></h2><div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="glass-card rounded-xl p-5"><i class="fa-brands fa-js text-3xl text-neonRed"></i><p class="mt-3 font-semibold">JavaScript</p></div><div class="glass-card rounded-xl p-5"><i class="fa-brands fa-react text-3xl text-neonRed"></i><p class="mt-3 font-semibold">React</p></div><div class="glass-card rounded-xl p-5"><i class="fa-brands fa-node-js text-3xl text-neonRed"></i><p class="mt-3 font-semibold">Node.js</p></div><div class="glass-card rounded-xl p-5"><i class="fa-brands fa-python text-3xl text-neonRed"></i><p class="mt-3 font-semibold">Python</p></div><div class="glass-card rounded-xl p-5"><i class="fa-solid fa-database text-3xl text-neonRed"></i><p class="mt-3 font-semibold">SQL / NoSQL</p></div><div class="glass-card rounded-xl p-5"><i class="fa-solid fa-brain text-3xl text-neonRed"></i><p class="mt-3 font-semibold">AI / API</p></div>
+    </div></div></section>
+
+    <section id="faq" class="py-24 relative z-10 px-4 bg-darkBg/70"><div class="max-w-3xl mx-auto"><div class="text-center mb-12"><span class="text-neonRed font-bold text-sm tracking-widest uppercase">FAQ</span><h2 class="text-3xl sm:text-5xl font-extrabold mt-4">Częste <span class="text-gradient-red">pytania</span></h2></div>
+      <div class="space-y-3">
+        <div class="glass-card rounded-xl overflow-hidden"><button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 font-semibold" type="button" aria-expanded="false"><span>Jak dokładna jest wycena w kalkulatorze?</span><i class="fa-solid fa-plus text-neonRed"></i></button><div class="faq-answer px-5 pb-5 text-sm text-gray-400" hidden>Kalkulator podaje orientacyjny koszt. Dokładna wycena wymaga omówienia funkcji, integracji, projektu graficznego i terminu.</div></div>
+        <div class="glass-card rounded-xl overflow-hidden"><button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 font-semibold" type="button" aria-expanded="false"><span>Czy realizujecie projekty dla urządzeń mobilnych?</span><i class="fa-solid fa-plus text-neonRed"></i></button><div class="faq-answer px-5 pb-5 text-sm text-gray-400" hidden>Tak, strony projektowane są z myślą o różnych rozmiarach ekranów. Aplikacje mobilne wymagają osobnego ustalenia zakresu i platform.</div></div>
+        <div class="glass-card rounded-xl overflow-hidden"><button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 font-semibold" type="button" aria-expanded="false"><span>Co muszę przygotować przed rozpoczęciem?</span><i class="fa-solid fa-plus text-neonRed"></i></button><div class="faq-answer px-5 pb-5 text-sm text-gray-400" hidden>Wystarczy wstępny opis pomysłu. Pomożemy doprecyzować cele, funkcjonalności, materiały i priorytety projektu.</div></div>
+      </div>
+    </div></section>
+
+    <section id="kontakt" class="py-24 relative z-10 px-4"><div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-start">
+      <div><span class="text-neonRed font-bold text-sm tracking-widest uppercase">Porozmawiajmy</span><h2 class="text-3xl sm:text-5xl font-extrabold mt-4 mb-5">Opowiedz nam o <span class="text-gradient-red">swoim pomyśle</span></h2><p class="text-gray-400 leading-relaxed mb-6">Wypełnij formularz, aby przygotować wiadomość z opisem projektu. Formularz otworzy domyślny program pocztowy — nie wysyła danych na serwer.</p><p class="text-sm text-gray-500"><i class="fa-solid fa-circle-info text-neonRed mr-2"></i>Uzupełnij adres e-mail firmy w kodzie przed publikacją strony, jeśli chcesz przyjmować zapytania.</p></div>
+      <form id="contact-form" class="glass-card rounded-2xl p-6 sm:p-8 space-y-4">
+        <div><label for="contact-name" class="block text-sm font-semibold mb-2">Imię</label><input id="contact-name" name="name" required maxlength="100" autocomplete="name" class="w-full rounded-xl bg-darkBg border border-gray-700 focus:border-neonRed outline-none p-3 text-white" placeholder="Jak masz na imię?"></div>
+        <div><label for="contact-email" class="block text-sm font-semibold mb-2">Adres e-mail</label><input id="contact-email" name="email" type="email" required maxlength="200" autocomplete="email" class="w-full rounded-xl bg-darkBg border border-gray-700 focus:border-neonRed outline-none p-3 text-white" placeholder="ty@firma.pl"></div>
+        <div><label for="contact-service" class="block text-sm font-semibold mb-2">Rodzaj projektu</label><select id="contact-service" name="service" class="w-full rounded-xl bg-darkBg border border-gray-700 focus:border-neonRed outline-none p-3 text-white"><option>Strona / aplikacja web</option><option>Aplikacja mobilna</option><option>AI / automatyzacja</option><option>Inny projekt</option></select></div>
+        <div><label for="contact-message" class="block text-sm font-semibold mb-2">Opis projektu</label><textarea id="contact-message" name="message" required maxlength="3000" rows="4" class="w-full rounded-xl bg-darkBg border border-gray-700 focus:border-neonRed outline-none p-3 text-white resize-y" placeholder="Napisz kilka zdań o swoim pomyśle..."></textarea></div>
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-neonRed text-white font-bold hover:bg-rubyRed transition"><i class="fa-solid fa-paper-plane mr-2"></i>Przygotuj wiadomość</button>
+        <p id="form-status" class="text-sm text-gray-400" aria-live="polite"></p>
+      </form>
+    </div></section>
+  </main>
+
+  <footer class="relative z-10 border-t border-neonRed/20 bg-darkBg py-8 px-4 text-center"><a href="#top" class="font-extrabold tracking-wider">NOVA<span class="text-neonRed">.</span>STUDIOS</a><p class="text-xs text-gray-500 mt-3">© <span id="current-year">2026</span> Nova Studios Software House. Wszelkie prawa zastrzeżone.</p><p class="text-xs text-gray-600 mt-2">Ceny i przykłady na stronie mają charakter orientacyjny.</p></footer>
+
+  <script>
+    'use strict';
+
+    // Custom cursor — wyłączony na urządzeniach dotykowych przez CSS.
+    const follower = document.getElementById('cursor-follower');
+    if (follower) {
+      document.addEventListener('mousemove', (event) => {
+        follower.style.left = event.clientX + 'px';
+        follower.style.top = event.clientY + 'px';
+      }, { passive: true });
+    }
+
+    // Menu mobilne zamyka się po wyborze linku i po Escape.
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    function setMobileMenu(open) {
+      if (!mobileBtn || !mobileMenu) return;
+      mobileMenu.classList.toggle('hidden', !open);
+      mobileMenu.classList.toggle('flex', open);
+      mobileBtn.setAttribute('aria-expanded', String(open));
+      mobileBtn.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
+    }
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => setMobileMenu(mobileMenu.classList.contains('hidden')));
+      mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileMenu(false)));
+    }
+
+    const serviceData = {
+      web: {
+        title: 'Strony i aplikacje web', time: 'Około 3–7 dni roboczych', price: 'od 1 800 PLN',
+        desc: 'Projektujemy responsywne strony i aplikacje internetowe nastawione na użyteczność, wydajność i dobrą strukturę SEO.',
+        features: ['Projekt UI/UX dopasowany do potrzeb', 'Optymalizacja szybkości i dostępności', 'Możliwość integracji systemu CMS', 'Konfiguracja podstawowych zabezpieczeń']
+      },
+      mobile: {
+        title: 'Aplikacje mobilne', time: 'Około 10–21 dni roboczych', price: 'od 4 500 PLN',
+        desc: 'Tworzymy aplikacje na iOS i Android. Zakres, integracje i publikację w sklepach ustalamy indywidualnie.',
+        features: ['Projekt ekranów i przepływów', 'Integracje API i powiadomienia push', 'Przechowywanie danych według potrzeb', 'Wsparcie przy przygotowaniu publikacji']
+      },
+      ai: {
+        title: 'Sztuczna inteligencja i AI', time: 'Około 7–14 dni roboczych', price: 'od 3 200 PLN',
+        desc: 'Pomagamy automatyzować powtarzalne procesy biznesowe przez integracje modeli AI i narzędzi firmowych.',
+        features: ['Asystenci i boty informacyjne', 'Analiza tekstów i dokumentów', 'Integracje z API modeli AI', 'Dopasowanie rozwiązania do procesu']
+      }
+    };
+
+    const modal = document.getElementById('service-modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalClose = document.getElementById('modal-close');
+    let lastFocusedElement = null;
+
+    function openServiceModal(type) {
+      const data = serviceData[type];
+      if (!data || !modal || !modalContent) return;
+      lastFocusedElement = document.activeElement;
+      // Tworzymy elementy przez DOM zamiast wkładać dane przez innerHTML.
+      modalContent.replaceChildren();
+      const badge = document.createElement('span');
+      badge.className = 'text-xs font-bold text-neonRed uppercase tracking-wider bg-neonRed/10 px-3 py-1 rounded-full border border-neonRed/20';
+      badge.textContent = 'Szczegóły usługi';
+      const title = document.createElement('h3');
+      title.id = 'modal-title';
+      title.className = 'text-3xl font-black text-white mt-3 mb-6';
+      title.textContent = data.title;
+      const infoGrid = document.createElement('div');
+      infoGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6';
+      [[ 'Szacowany czas', data.time ], [ 'Orientacyjny koszt', data.price ]].forEach(([label, value]) => {
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-xl bg-darkBg border border-gray-800';
+        const small = document.createElement('span');
+        small.className = 'text-xs text-gray-400 uppercase block';
+        small.textContent = label;
+        const strong = document.createElement('span');
+        strong.className = 'text-lg font-bold text-neonRed';
+        strong.textContent = value;
+        card.append(small, strong);
+        infoGrid.append(card);
+      });
+      const desc = document.createElement('p');
+      desc.className = 'text-gray-300 text-sm leading-relaxed mb-6';
+      desc.textContent = data.desc;
+      const heading = document.createElement('h4');
+      heading.className = 'text-sm font-bold text-white uppercase mb-3';
+      heading.textContent = 'Co może zawierać zakres prac:';
+      const list = document.createElement('ul');
+      list.className = 'space-y-2 mb-8';
+      data.features.forEach(feature => {
+        const li = document.createElement('li');
+        li.className = 'text-sm text-gray-400 flex items-start gap-2';
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-check text-neonRed text-xs mt-1';
+        icon.setAttribute('aria-hidden', 'true');
+        const span = document.createElement('span');
+        span.textContent = feature;
+        li.append(icon, span);
+        list.append(li);
+      });
+      const link = document.createElement('a');
+      link.href = '#kontakt';
+      link.className = 'block w-full py-3.5 text-center rounded-xl bg-neonRed text-white font-bold hover:bg-rubyRed transition-colors';
+      link.textContent = 'Zapytaj o wycenę';
+      link.addEventListener('click', closeServiceModal);
+      modalContent.append(badge, title, infoGrid, desc, heading, list, link);
+      modal.classList.add('modal-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (modalClose) modalClose.focus();
+    }
+
+    function closeServiceModal() {
+      if (!modal) return;
+      modal.classList.remove('modal-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+    }
+
+    document.querySelectorAll('[data-service]').forEach(button => {
+      button.addEventListener('click', () => openServiceModal(button.dataset.service));
+    });
+    if (modalClose) modalClose.addEventListener('click', closeServiceModal);
+    if (modal) {
+      modal.addEventListener('click', event => { if (event.target === modal) closeServiceModal(); });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modal.classList.contains('modal-active')) closeServiceModal();
+      });
+    }
+
+    // Kalkulator: prosta, jawna formuła orientacyjna.
+    const calculatorTypes = {
+      landing: { price: 1800, days: 3 },
+      app: { price: 4500, days: 10 },
+      mobile: { price: 6000, days: 14 }
+    };
+    let selectedType = 'landing';
+    const pagesRange = document.getElementById('pages-range');
+    const pageDisplay = document.getElementById('pages-count-display');
+    const priceElement = document.getElementById('calc-price');
+    const timeElement = document.getElementById('calc-time');
+    const pageLabels = ['1–3 ekrany', '4–6 ekranów', '7–10 ekranów', '11–15 ekranów', '15+ ekranów'];
+
+    function updateCalc() {
+      if (!pagesRange) return;
+      const pages = Number.parseInt(pagesRange.value, 10) || 1;
+      const base = calculatorTypes[selectedType] || calculatorTypes.landing;
+      const totalPrice = base.price + (pages - 1) * 600;
+      const totalDays = base.days + (pages - 1) * 2;
+      if (pageDisplay) pageDisplay.textContent = pageLabels[pages - 1] || pageLabels[0];
+      if (priceElement) priceElement.textContent = totalPrice.toLocaleString('pl-PL') + ' PLN';
+      if (timeElement) timeElement.textContent = `ok. ${totalDays}–${totalDays + 3} dni`;
+    }
+    document.querySelectorAll('.calc-type-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedType = button.dataset.type in calculatorTypes ? button.dataset.type : 'landing';
+        document.querySelectorAll('.calc-type-btn').forEach(other => {
+          const active = other === button;
+          other.classList.toggle('border-neonRed', active);
+          other.classList.toggle('bg-neonRed/20', active);
+          other.classList.toggle('border-gray-700', !active);
+          other.classList.toggle('bg-darkBg', !active);
+          other.classList.toggle('text-white', active);
+          other.classList.toggle('text-gray-300', !active);
+          other.setAttribute('aria-pressed', String(active));
+        });
+        updateCalc();
+      });
+    });
+    if (pagesRange) pagesRange.addEventListener('input', updateCalc);
+    document.querySelectorAll('.calc-type-btn').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.type === selectedType)));
+    updateCalc();
+
+    // FAQ accordion.
+    document.querySelectorAll('.faq-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        if (answer) answer.hidden = expanded;
+        const icon = button.querySelector('i');
+        if (icon) icon.className = expanded ? 'fa-solid fa-plus text-neonRed' : 'fa-solid fa-minus text-neonRed';
+      });
+    });
+
+    // Formularz nie udaje wysyłki na serwer — tworzy wiadomość w domyślnym programie pocztowym.
+    const contactForm = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+    const CONTACT_EMAIL = 'kontakt@twoja-domena.pl'; // Zmień na właściwy adres przed publikacją.
+    if (contactForm) {
+      contactForm.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!contactForm.reportValidity()) return;
+        const formData = new FormData(contactForm);
+        const subject = `Zapytanie o projekt — ${String(formData.get('service') || '')}`;
+        const body = [
+          `Imię: ${String(formData.get('name') || '')}`,
+          `E-mail: ${String(formData.get('email') || '')}`,
+          `Rodzaj projektu: ${String(formData.get('service') || '')}`,
+          '',
+          'Opis projektu:',
+          String(formData.get('message') || '')
+        ].join('\\n');
+        if (CONTACT_EMAIL === 'kontakt@twoja-domena.pl') {
+          if (formStatus) formStatus.textContent = 'Przed publikacją zmień CONTACT_EMAIL w kodzie na właściwy adres e-mail. Formularz nie wysłał danych.';
+          return;
+        }
+        if (formStatus) formStatus.textContent = 'Otwieramy program pocztowy z przygotowaną wiadomością.';
+        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      });
+    }
+
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) yearElement.textContent = String(new Date().getFullYear());
+
+    // Animowane tło cząsteczkowe z ograniczoną liczbą obiektów i obsługą reduced motion.
+    const canvas = document.getElementById('bg-canvas');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (canvas && !reducedMotion) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        let particles = [];
+        let animationFrame = 0;
+        let width = 0;
+        let height = 0;
+        const particleCount = window.innerWidth < 640 ? 24 : 45;
+        function resizeCanvas() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          width = window.innerWidth;
+          height = window.innerHeight;
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = width + 'px';
+          canvas.style.height = height + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        class Particle {
+          constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - .5) * .45;
+            this.vy = (Math.random() - .5) * .45;
+            this.radius = Math.random() * 1.5 + .7;
+          }
+          update() {
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+          }
+          draw() {
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,26,60,.42)'; ctx.fill();
+          }
+        }
+        function initParticles() {
+          particles = Array.from({ length: particleCount }, () => new Particle());
+        }
+        function animateCanvas() {
+          ctx.clearRect(0, 0, width, height);
+          for (let i = 0; i < particles.length; i++) {
+            const particle = particles[i];
+            particle.update(); particle.draw();
+            for (let j = i + 1; j < particles.length; j++) {
+              const other = particles[j];
+              const dx = particle.x - other.x;
+              const dy = particle.y - other.y;
+              const distance = Math.hypot(dx, dy);
+              if (distance < 120) {
+                ctx.beginPath();
+                ctx.moveTo(particle.x, particle.y);
+                ctx.lineTo(other.x, other.y);
+                ctx.strokeStyle = `rgba(255,26,60,${(1 - distance / 120) * .12})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+              }
+            }
+          }
+          animationFrame = window.requestAnimationFrame(animateCanvas);
+        }
+        resizeCanvas();
+        initParticles();
+        animateCanvas();
+        let resizeTimeout = 0;
+        window.addEventListener('resize', () => {
+          window.clearTimeout(resizeTimeout);
+          resizeTimeout = window.setTimeout(() => {
+            resizeCanvas();
+            initParticles();
+          }, 120);
+        }, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            window.cancelAnimationFrame(animationFrame);
+          } else {
+            window.cancelAnimationFrame(animationFrame);
+            animationFrame = window.requestAnimationFrame(animateCanvas);
+          }
+        });
+      }
+    } else if (canvas) {
+      canvas.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
